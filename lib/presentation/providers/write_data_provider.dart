@@ -136,9 +136,6 @@ WriteFormNotifier({ required this.WriteUserCallback}): super(WriteFormState());
       state.vehicle,
       state.devices
     );
-    state = state.copyWith(
-      complete: true,
-    );
   }
     _touchEveryField(){
     final name = Name.dirty(state.name.value);
@@ -149,6 +146,7 @@ WriteFormNotifier({ required this.WriteUserCallback}): super(WriteFormState());
       name: name,
       email: email,
       password: pass,
+      complete: Formz.validate([name,email, pass]),
       isValid: Formz.validate([name,email, pass]) && state.vehicle.isNotEmpty && state.devices.isNotEmpty
     );
   }

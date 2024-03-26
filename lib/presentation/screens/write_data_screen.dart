@@ -4,6 +4,7 @@ import 'package:glocation/presentation/providers/write_data_provider.dart';
 import 'package:glocation/presentation/shared/custom_filled_butom.dart';
 import 'package:glocation/presentation/shared/custom_text_form_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class WriteDataScreen extends ConsumerWidget {
   const WriteDataScreen({super.key});
@@ -19,8 +20,48 @@ class WriteDataScreen extends ConsumerWidget {
     );
   }
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+      
+  void showMessage(String message, subMessage, bool complete) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:  Text(
+            message,
+            style: const TextStyle(fontSize: 35, color: Colors.black),
+          ),
+          content:  Text(subMessage,
+              style: const TextStyle(fontSize: 25)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 20, bottom: 5),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size(100, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                child: const Text("Close",
+                    style: TextStyle(fontSize: 25, color: Colors.white)),
+                onPressed: () {
+                  if (complete)context.go('/');
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
     final size = MediaQuery.of(context).size;
     final writeForm = ref.watch(WriteFormProvider);
     ref.listen(managementDataProvider, (previous, next) {
@@ -85,10 +126,17 @@ class WriteDataScreen extends ConsumerWidget {
                     onPressed: () {
                       ref.read(WriteFormProvider.notifier).onFormSubmit();
                       if(ref.watch(WriteFormProvider).isValid){
-                        //TODO CAMBIAR ESTO
-                        print('Todo Funciona Correctamente');
-                      }else{
-                        print('Algo salio mal');
+                        try {
+                          ref.read(managementDataProvider.notifier).writeData(
+                            ref.watch(WriteFormProvider).email.value,
+                            ref.watch(WriteFormProvider).password.value,
+                            ref.watch(WriteFormProvider).name.value,
+                            ref.watch(WriteFormProvider).vehicle,
+                            ref.watch(WriteFormProvider).devices
+                          );
+                        } catch (e) {
+                          showMessage('Error', e.toString(), false);
+                        }
                       }
                     },
                     text: 'Write Data'),

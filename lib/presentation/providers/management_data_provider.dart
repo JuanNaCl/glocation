@@ -34,6 +34,7 @@ class ManagementDataNotifier extends StateNotifier<ManagementDataState>{
   void writeData(String email,password,fullName,vehicle, devices) async {
     await Future.delayed(const Duration(seconds: 1));
     try {
+      //TODO: Implementar la lógica de registro
       // final user = await authRepository.register(email, password, fullName);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
