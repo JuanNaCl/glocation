@@ -1,4 +1,4 @@
-import 'package:glocation/services/sqlite/glocation_db.dart';
+import 'package:glocation/services/sqlite/glocation_crud_db.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

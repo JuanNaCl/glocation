@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:glocation/presentation/providers/management_data_provider.dart';
 import 'package:glocation/presentation/providers/write_data_provider.dart';
-import 'package:glocation/presentation/shared/custom_filled_butom.dart';
+import 'package:glocation/presentation/shared/custom_filled_button.dart';
 import 'package:glocation/presentation/shared/custom_text_form_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +9,8 @@ import 'package:go_router/go_router.dart';
 class WriteDataScreen extends ConsumerWidget {
   const WriteDataScreen({super.key});
   static const name = 'WriteDataScreen';
-  //
+  
+//Error proveniente de la base de datos  
   void showSnackBar(BuildContext context, String errorMessage) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -20,10 +21,10 @@ class WriteDataScreen extends ConsumerWidget {
     );
   }
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-      
+  
+  //Confirmación de la escritura de datos 
   void showMessage(String message, subMessage, bool complete) {
     showDialog(
       context: context,
@@ -46,14 +47,17 @@ class WriteDataScreen extends ConsumerWidget {
                   backgroundColor: Colors.black,
                   minimumSize: const Size(100, 50),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                 ),
                 child: const Text("Close",
                     style: TextStyle(fontSize: 25, color: Colors.white)),
                 onPressed: () {
-                  if (complete)context.go('/');
+                  if (complete){
+                    context.go('/');
+                  }else{
                   Navigator.of(context).pop();
+                  }
                 },
               ),
             ),
@@ -67,6 +71,7 @@ class WriteDataScreen extends ConsumerWidget {
     ref.listen(managementDataProvider, (previous, next) {
       if (next.errorMessage.isEmpty) return;
       showSnackBar(context, next.errorMessage);
+      print(next.errorMessage);
     });
     return Scaffold(
       appBar: AppBar(
@@ -127,13 +132,7 @@ class WriteDataScreen extends ConsumerWidget {
                       ref.read(WriteFormProvider.notifier).onFormSubmit();
                       if(ref.watch(WriteFormProvider).isValid){
                         try {
-                          ref.read(managementDataProvider.notifier).writeData(
-                            ref.watch(WriteFormProvider).email.value,
-                            ref.watch(WriteFormProvider).password.value,
-                            ref.watch(WriteFormProvider).name.value,
-                            ref.watch(WriteFormProvider).vehicle,
-                            ref.watch(WriteFormProvider).devices
-                          );
+                          showMessage('Written successful', 'Data has been written successfully', true);
                         } catch (e) {
                           showMessage('Error', e.toString(), false);
                         }
@@ -147,7 +146,7 @@ class WriteDataScreen extends ConsumerWidget {
                 height: 50,
                 child: CustomFilledButton(
                   onPressed: () {
-                    // Navigate to load data
+                    context.push('/loadData');
                   },
                   text: 'Load Data',
                 ),

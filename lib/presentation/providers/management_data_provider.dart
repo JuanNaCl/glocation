@@ -1,3 +1,4 @@
+import 'package:glocation/services/sqlite/glocation_crud_db.dart';
 import 'package:riverpod/riverpod.dart';
 
 
@@ -31,13 +32,15 @@ class ManagementDataNotifier extends StateNotifier<ManagementDataState>{
     state = state.copyWith(status: AuthStatus.authenticated);
   }
 
-  void writeData(String email,password,fullName,vehicle, devices) async {
+  Future<bool> writeData(String email,password,fullName,vehicle, devices) async {
     await Future.delayed(const Duration(seconds: 1));
     try {
-      //TODO: Implementar la lógica de registro
-      // final user = await authRepository.register(email, password, fullName);
+      print("Paso caca");
+      await GlocationDB().create(title: fullName,email: email,password: password,vehicle: vehicle,devices: devices);
+      return true;
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
+      return false;
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glocation/presentation/shared/custom_filled_button.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -6,6 +7,7 @@ class HomeScreen extends StatelessWidget {
   static const name = 'HomeScreen';
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
@@ -15,17 +17,27 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                context.push('/writeData');
-              },
-              child: const Text('Write Data'),
+            SizedBox(
+              width: size.width * 0.8,
+              height: 50,
+              child: CustomFilledButton(
+                buttonColor: Colors.black,
+                onPressed: () {
+                  context.push('/writeData');
+                },
+                text: ('Write Data'),
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                context.push('/loadData');
-              },
-              child: const Text('Load Data'),
+            const SizedBox( height: 20),
+            SizedBox(
+              width: size.width * 0.8,
+              height: 50,
+              child: CustomFilledButton(
+                onPressed: () {
+                  context.push('/loadData');
+                },
+                text: ('Load Data'),
+              ),
             ),
           ],
         ),

@@ -81,8 +81,8 @@ class WriteFormState {
 //Implementación
 
 class WriteFormNotifier extends StateNotifier<WriteFormState> {
-  final Function(String, String, String,String,String) WriteUserCallback;
-WriteFormNotifier({ required this.WriteUserCallback}): super(WriteFormState());
+  final Function(String, String, String,String,String) writeUserCallback;
+WriteFormNotifier({ required this.writeUserCallback}): super(WriteFormState());
 
   onEmailChange(String value){
     final newEmail = Email.dirty(value);
@@ -129,7 +129,7 @@ WriteFormNotifier({ required this.WriteUserCallback}): super(WriteFormState());
     if(!state.isValid) return null;
     // print(state);
     
-    await WriteUserCallback(
+    await writeUserCallback(
       state.email.value,
       state.password.value,
       state.name.value,
@@ -162,6 +162,6 @@ final WriteFormProvider = StateNotifierProvider.autoDispose<WriteFormNotifier, W
   .writeData;
 
   return WriteFormNotifier(
-    WriteUserCallback: writeData,
+    writeUserCallback: writeData,
   );
 });
