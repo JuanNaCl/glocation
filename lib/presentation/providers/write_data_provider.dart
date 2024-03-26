@@ -8,25 +8,25 @@ import 'package:riverpod/riverpod.dart';
 
 
 //Creación
-class RegisterFormState {
+class WriteFormState {
   final bool complete;
   final bool isPosting;
   final bool isFormPosted;
   final bool isValid;
   final String vehicle;
-  final List<String> devices;
+  final String devices;
   final Name name;
   final Email email;
   final Password password;
 
-  RegisterFormState(
+  WriteFormState(
       {
       this.complete = false,
       this.isPosting = false,
       this.isFormPosted = false,
       this.isValid = false,
       this.vehicle = '',
-      this.devices = const [],
+      this.devices = '',
       this.name = const Name.pure(),
       this.email = const Email.pure(),
       this.password = const Password.pure(),
@@ -49,20 +49,20 @@ class RegisterFormState {
     ''';  
   }
 
-  RegisterFormState copyWith (
+  WriteFormState copyWith (
     {
       bool? complete,
       bool? isPosting,
       bool? isFormPosted,
       bool? isValid,
       String? vehicle,
-      List<String>? devices,
+      String? devices,
       Name? name,
       Email? email,
       Password? password,
     }
   ) {
-    return RegisterFormState(
+    return WriteFormState(
       complete: complete ?? this.complete,
       isPosting: isPosting ?? this.isPosting,
       isFormPosted: isFormPosted ?? this.isFormPosted,
@@ -80,9 +80,9 @@ class RegisterFormState {
 
 //Implementación
 
-class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
-  final Function(String, String, String,String,List<String>) registerUserCallback;
-RegisterFormNotifier({ required this.registerUserCallback}): super(RegisterFormState());
+class WriteFormNotifier extends StateNotifier<WriteFormState> {
+  final Function(String, String, String,String,String) WriteUserCallback;
+WriteFormNotifier({ required this.WriteUserCallback}): super(WriteFormState());
 
   onEmailChange(String value){
     final newEmail = Email.dirty(value);
@@ -92,7 +92,7 @@ RegisterFormNotifier({ required this.registerUserCallback}): super(RegisterFormS
     );
   }
   onPasswordChange(String value){
-        final newPassword = Password.dirty(value);
+    final newPassword = Password.dirty(value);
     state = state.copyWith(
       password: newPassword,
       isValid: Formz.validate([newPassword, state.email, state.name])
@@ -106,6 +106,19 @@ RegisterFormNotifier({ required this.registerUserCallback}): super(RegisterFormS
       isValid: Formz.validate([newName, state.email, state.password])
     );
   }
+
+  onVehicleChange(String value){
+    state = state.copyWith(
+      vehicle: value,
+    );
+  }
+
+  onDevicesChange(String value){
+    state = state.copyWith(
+      devices: value,
+    );
+  }
+
   onFormSubmit() async{
     // if (state.password != state.confirmPassword) {
 
@@ -116,7 +129,7 @@ RegisterFormNotifier({ required this.registerUserCallback}): super(RegisterFormS
     if(!state.isValid) return null;
     // print(state);
     
-    await registerUserCallback(
+    await WriteUserCallback(
       state.email.value,
       state.password.value,
       state.name.value,
@@ -125,10 +138,6 @@ RegisterFormNotifier({ required this.registerUserCallback}): super(RegisterFormS
     );
     state = state.copyWith(
       complete: true,
-    );
-    await Future.delayed(const Duration(seconds: 2));
-    state = state.copyWith(
-      complete: false,
     );
   }
     _touchEveryField(){
@@ -140,7 +149,7 @@ RegisterFormNotifier({ required this.registerUserCallback}): super(RegisterFormS
       name: name,
       email: email,
       password: pass,
-      isValid: Formz.validate([name,email, pass])
+      isValid: Formz.validate([name,email, pass]) && state.vehicle.isNotEmpty && state.devices.isNotEmpty
     );
   }
 }
@@ -149,12 +158,12 @@ RegisterFormNotifier({ required this.registerUserCallback}): super(RegisterFormS
 //Provider/ como se consume 
 
 // ignore: non_constant_identifier_names
-final RegisterFormProvider = StateNotifierProvider.autoDispose<RegisterFormNotifier, RegisterFormState>((ref) {
+final WriteFormProvider = StateNotifierProvider.autoDispose<WriteFormNotifier, WriteFormState>((ref) {
 
   final writeData = ref.watch(managementDataProvider.notifier)
   .writeData;
 
-  return RegisterFormNotifier(
-    registerUserCallback: writeData,
+  return WriteFormNotifier(
+    WriteUserCallback: writeData,
   );
 });
