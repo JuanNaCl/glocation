@@ -87,8 +87,6 @@ class _LoadDataScreenState extends State<LoadDataScreen> {
       ),
       body: Column(
         children: [
-
-
           FutureBuilder(future: futureRegisters, builder: (context, snapshot){
             if(snapshot.connectionState == ConnectionState.waiting){
               return const CircularProgressIndicator();
@@ -97,7 +95,7 @@ class _LoadDataScreenState extends State<LoadDataScreen> {
             }
             else{
               final registers = snapshot.data! ;
-              return registers.isEmpty ? const Text('No data found'):ListView.builder(
+              return registers.isEmpty ? const Center(child: Text('No data found', style: TextStyle(fontSize: 35),)):ListView.builder(
                 shrinkWrap: true,
                 itemCount: registers.length,
                 itemBuilder: (context, index){

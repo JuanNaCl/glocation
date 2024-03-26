@@ -4,5 +4,6 @@
         "Ipad",
         "Iphone"
     ],
-    "cSpell.language": "en,es-ES"
+    "cSpell.language": "en,es-ES",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

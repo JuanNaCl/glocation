@@ -17,6 +17,9 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset('assets/icon.jpg'),
+            const SizedBox( height: 20),
+
             SizedBox(
               width: size.width * 0.8,
               height: 50,
@@ -28,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                 text: ('Write Data'),
               ),
             ),
-            const SizedBox( height: 20),
+            const SizedBox( height: 10),
             SizedBox(
               width: size.width * 0.8,
               height: 50,

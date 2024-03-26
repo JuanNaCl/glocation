@@ -71,7 +71,6 @@ class WriteDataScreen extends ConsumerWidget {
     ref.listen(managementDataProvider, (previous, next) {
       if (next.errorMessage.isEmpty) return;
       showSnackBar(context, next.errorMessage);
-      print(next.errorMessage);
     });
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +84,7 @@ class WriteDataScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CustomTextFormField(
-                  label: 'Name',
+                  label: 'Full Name',
                   hint: 'Enter your name',
                   onChanged: ref.read(WriteFormProvider.notifier).onNameChange,
                   errorMessage:

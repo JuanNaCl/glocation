@@ -1,4 +1,4 @@
-package com.example.glocation
+package com.alienigena264.glocation
 
 import io.flutter.embedding.android.FlutterActivity
 
